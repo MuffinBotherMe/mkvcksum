@@ -1,4 +1,4 @@
-# ✨ Features
+## ✨ Features
 
 Matroska (based on EBML) allows embedding CRC-32 elements to verify data integrity.
 
@@ -7,7 +7,7 @@ This is a small command-line tool written in Go to handle CRC-32 checksums insid
 - Verify all existing CRC-32 checksums already present
 - In write mode, add or update a CRC-32 element at the beginning of the Segment to protect the entire file content
 
-# 📚 Example usage
+## 📚 Example usage
 
 ```
 Usage: mkvcksum input.mkv [output.mkv]
@@ -58,22 +58,21 @@ $ mkvinfo output.mkv | head -n 10
 | + Multiplexing application: libebml2 v0.10.0 + libmatroska2 v0.10.1
 ```
 
-
-# 🚀 Building
+## 🚀 Building
 
 ```
 go build
 ```
 
-# 🖥 Platform support
+## 🖥 Platform support
 
 Fully cross-platform (tested on Linux + Windows).
 
-# 📌 TODO
+## 📌 TODO
 
  - Patch SeekHead+Cues offsets
  - Code cleanup
 
-# 📄 License
+## 📄 License
 
 MIT. See [LICENSE](./LICENSE)
