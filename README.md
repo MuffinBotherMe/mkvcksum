@@ -4,8 +4,8 @@ Matroska (based on EBML) allows embedding CRC-32 elements to verify data integri
 
 This is a small command-line tool written in Go to handle CRC-32 checksums inside MKV (Matroska) files.
 
-- Verify all existing CRC-32 checksums already present.
-- In write mode, add or update a CRC-32 element at the beginning of the Segment to protect the entire file content.
+- Verify all existing CRC-32 checksums already present
+- In write mode, add or update a CRC-32 element at the beginning of the Segment to protect the entire file content
 
 # 📚 Example usage
 
@@ -61,8 +61,19 @@ $ mkvinfo output.mkv | head -n 10
 
 # 🚀 Building
 
+```
 go build
+```
+
+# 🖥 Platform support
+
+Fully cross-platform (tested on Linux + Windows).
+
+# 📌 TODO
+
+ - Patch SeekHead+Cues offsets
+ - Code cleanup
 
 # 📄 License
 
-MIT. See [LICENSE](./LICENSE).
+MIT. See [LICENSE](./LICENSE)
