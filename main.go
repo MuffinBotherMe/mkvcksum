@@ -79,14 +79,14 @@ func parseElement(reader *bufio.Reader, writer *os.File, level int64, currentOff
 		if err == io.EOF {
 			break
 		} else if err != nil {
-			fmt.Println("Erreur lecture ID:", err)
+			fmt.Println("Error parsing ID (value):", err)
 			break
 		}
 
 		idBytes := make([]byte, idLen)
 		_, err = io.ReadFull(reader, idBytes)
 		if err != nil {
-			fmt.Println("Erreur lecture taille:", err)
+			fmt.Println("Error parsing ID (length):", err)
 			break
 		}
 
@@ -95,14 +95,14 @@ func parseElement(reader *bufio.Reader, writer *os.File, level int64, currentOff
 		// Read size
 		size, sizeLen, err := readVint(reader, false)
 		if err != nil {
-			fmt.Println("Erreur lecture taille:", err)
+			fmt.Println("Error parsing size (value):", err)
 			break
 		}
 
 		sizeBytes := make([]byte, sizeLen)
 		_, err = io.ReadFull(reader, sizeBytes)
 		if err != nil {
-			fmt.Println("Erreur lecture taille:", err)
+			fmt.Println("Error parsing size (length):", err)
 			break
 		}
 
@@ -479,36 +479,38 @@ func main() {
 
 	fmt.Printf("\r\033[K")
 
-	//fmt.Println("")
-
 	//printElement(rootElement, 0)
 
 	//if writer != nil {
 	//    writeDirtyElement(writer, rootElement)
 	//}
 
-	for i := range blockCRCs {
-		expectedCRC := blockCRCs[i].ExpectedCRC
-		computedCRC := blockCRCs[i].CRC32.Sum32()
-		if blockCRCs[i].Dirty {
-			writer.Seek(blockCRCs[i].Element.WriteOffset+2, io.SeekStart)
-			data := make([]byte, 4)
-			binary.LittleEndian.PutUint32(data, uint32(computedCRC))
-			writer.Write(data)
-			expectedCRC = computedCRC
-		}
-		/*
-		   path := ""
-		   tmp := blockCRCs[i].Element.Parent
-		   for tmp.Parent != nil {
-		       path = getElementName(ElementID(tmp.ID)) + "/" + path
-		       tmp = tmp.Parent
-		   }
-		*/
-		if computedCRC == expectedCRC {
-			fmt.Printf("CRC %2d ✅ (%08x)\n", i, computedCRC)
-		} else {
-			fmt.Printf("CRC %2d ❌ (%08x, expected %08x)\n", i, computedCRC, expectedCRC)
+	if len(blockCRCs) == 0 {
+		fmt.Printf("No CRC present\n")
+	} else {
+		for i := range blockCRCs {
+			expectedCRC := blockCRCs[i].ExpectedCRC
+			computedCRC := blockCRCs[i].CRC32.Sum32()
+			if blockCRCs[i].Dirty {
+				writer.Seek(blockCRCs[i].Element.WriteOffset+2, io.SeekStart)
+				data := make([]byte, 4)
+				binary.LittleEndian.PutUint32(data, uint32(computedCRC))
+				writer.Write(data)
+				expectedCRC = computedCRC
+			}
+			/*
+			   path := ""
+			   tmp := blockCRCs[i].Element.Parent
+			   for tmp.Parent != nil {
+			       path = getElementName(ElementID(tmp.ID)) + "/" + path
+			       tmp = tmp.Parent
+			   }
+			*/
+			if computedCRC == expectedCRC {
+				fmt.Printf("CRC %2d ✅ (%08x)\n", i, computedCRC)
+			} else {
+				fmt.Printf("CRC %2d ❌ (%08x, expected %08x)\n", i, computedCRC, expectedCRC)
+			}
 		}
 	}
 }

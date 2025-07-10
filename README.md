@@ -1,3 +1,5 @@
+# ⚠ Still WIP (work in progress)
+
 ## ✨ Features
 
 Matroska (based on EBML) allows embedding CRC-32 elements to verify data integrity.
